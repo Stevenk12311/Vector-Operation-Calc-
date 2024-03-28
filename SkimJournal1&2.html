@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vector Operations Calculator</title>
+</head>
+<body>
+    <h2>Vector Operations Calculator</h2>
+
+    <label for="vector1">Vector 1:</label>
+    <input type="text" id="vector1" placeholder="Enter vector 1 (e.g., 1,2,3)">
+    <br><br>
+
+    <label for="vector2">Vector 2:</label>
+    <input type="text" id="vector2" placeholder="Enter vector 2 (e.g., 4,5,6)">
+    <br><br>
+
+    <label for="scalar">Scalar Value:</label>
+    <input type="text" id="scalar" placeholder="Enter scalar value">
+    <br><br>
+
+    <button onclick="calculate()">Calculate</button>
+    
+    <div id="results"></div>
+
+    <script>
+        // Function to perform vector addition
+        function vectorAddition(v1, v2) {
+            return [v1[0] + v2[0], v1[1] + v2[1], v1[2] + v2[2]];
+        }
+
+        // Function to perform vector subtraction
+        function vectorSubtraction(v1, v2) {
+            return [v1[0] - v2[0], v1[1] - v2[1], v1[2] - v2[2]];
+        }
+
+        // Function to perform vector multiplication by a scalar
+        function vectorScalarMultiplication(v, scalar) {
+            return [v[0] * scalar, v[1] * scalar, v[2] * scalar];
+        }
+
+        // Function to calculate dot product of two vectors
+        function dotProduct(v1, v2) {
+            return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
+        }
+
+        // Function to calculate cross product of two vectors
+        function crossProduct(v1, v2) {
+            let x = v1[1] * v2[2] - v1[2] * v2[1];
+            let y = v1[2] * v2[0] - v1[0] * v2[2];
+            let z = v1[0] * v2[1] - v1[1] * v2[0];
+            return [x, y, z];
+        }
+
+        // Function to calculate magnitude of a vector
+        function magnitude(v) {
+            return Math.sqrt(v[0] ** 2 + v[1] ** 2 + v[2] ** 2);
+        }
+
+        // Function to perform vector projection
+        function vectorProjection(v, onto) {
+            let dotProd = dotProduct(v, onto);
+            let ontoMagnitude = magnitude(onto);
+            let scalarProjection = dotProd / ontoMagnitude;
+            return [onto[0] * scalarProjection, onto[1] * scalarProjection, onto[2] * scalarProjection];
+        }
+
+        // Function to calculate scalar projection
+        function scalarProjection(v, onto) {
+            let dotProd = dotProduct(v, onto);
+            let ontoMagnitude = magnitude(onto);
+            return dotProd / ontoMagnitude;
+        }
+
+        // Function to perform calculations when the "Calculate" button is clicked
+        function calculate() {
+            // Get input values from input fields
+            let vector1Input = document.getElementById("vector1").value;
+            let vector2Input = document.getElementById("vector2").value;
+            let scalarInput = parseFloat(document.getElementById("scalar").value);
+
+            // Parse input strings into arrays of numbers
+            let vector1 = vector1Input.split(",").map(Number);
+            let vector2 = vector2Input.split(",").map(Number);
+
+            // Get the element to display results
+            let results = document.getElementById("results");
+            results.innerHTML = ""; // Clear previous results
+
+            // Validate input
+            if (vector1.length !== 3 || vector2.length !== 3 || isNaN(scalarInput)) {
+                results.innerHTML = "Please enter valid inputs for vectors and scalar.";
+                return;
+            }
+
+            // Perform vector operations
+            let vectorAdd = vectorAddition(vector1, vector2);
+            let vectorSub = vectorSubtraction(vector1, vector2);
+            let vectorScalarMul = vectorScalarMultiplication(vector1, scalarInput);
+            let dotProd = dotProduct(vector1, vector2);
+            let crossProd = crossProduct(vector1, vector2);
+            let scalarProj = scalarProjection(vector1, vector2);
+            let vectorProj = vectorProjection(vector1, vector2);
+
+            // Display results
+            results.innerHTML += "<p>Vector Addition: [" + vectorAdd.join(", ") + "]</p>";
+            results.innerHTML += "<p>Vector Subtraction: [" + vectorSub.join(", ") + "]</p>";
+            results.innerHTML += "<p>Vector Scalar Multiplication: [" + vectorScalarMul.join(", ") + "]</p>";
+            results.innerHTML += "<p>Dot Product: " + dotProd + "</p>";
+            results.innerHTML += "<p>Cross Product: [" + crossProd.join(", ") + "]</p>";
+            results.innerHTML += "<p>Scalar Projection: " + scalarProj + "</p>";
+            results.innerHTML += "<p>Vector Projection: [" + vectorProj.join(", ") + "]</p>";
+        }
+    </script>
+</body>
+</html>
